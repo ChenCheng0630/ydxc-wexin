@@ -71,11 +71,11 @@ def send_message():
     data = request.get_json()
     print(f"data: {data}")
 
-    return Response(data={
+    return Response({
         "ToUserName": data["FromUserName"],
         "FromUserName": data["ToUserName"],
         "CreateTime": data["CreateTime"],
         "MsgType": "text",
         "Content": "你好，我是机器人小Q，有什么可以帮助你的吗？"
 
-    })
+    }, mimetype='application/json')
