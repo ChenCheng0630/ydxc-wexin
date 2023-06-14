@@ -64,3 +64,10 @@ def get_count():
     """
     counter = Counters.query.filter(Counters.id == 1).first()
     return make_succ_response(0) if counter is None else make_succ_response(counter.count)
+
+
+@app.route('/api/send_message', methods=['POST'])
+def send_message():
+    data = request.get_json()
+    print(data)
+    return make_succ_response("success")
