@@ -69,5 +69,11 @@ def get_count():
 @app.route('/api/send_message', methods=['POST'])
 def send_message():
     data = request.get_json()
-    print(data)
-    return make_succ_response("success")
+    return make_succ_response(data={
+        "ToUserName": data["FromUserName"],
+        "FromUserName": data["ToUserName"],
+        "CreateTime": data["CreateTime"],
+        "MsgType": "text",
+        "Content": "你好，我是机器人小Q，有什么可以帮助你的吗？"
+
+    })
