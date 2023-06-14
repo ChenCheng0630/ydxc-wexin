@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask import render_template, request
+from flask import render_template, request, Response
 from run import app
 from wxcloudrun.dao import delete_counterbyid, query_counterbyid, insert_counter, update_counterbyid
 from wxcloudrun.model import Counters
@@ -69,7 +69,9 @@ def get_count():
 @app.route('/api/send_message', methods=['POST'])
 def send_message():
     data = request.get_json()
-    return make_succ_response(data={
+    print(f"data: {data}")
+
+    return Response(data={
         "ToUserName": data["FromUserName"],
         "FromUserName": data["ToUserName"],
         "CreateTime": data["CreateTime"],
