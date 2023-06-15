@@ -72,11 +72,15 @@ def send_message():
     data = request.get_json()
     app.logger.info(f"Received message: {data}")
 
-    return Response({
+    # get current time in integer
+    now = int(datetime.now().timestamp())
+
+    res_body = {
         "ToUserName": data["FromUserName"],
         "FromUserName": data["ToUserName"],
-        "CreateTime": data["CreateTime"],
+        "CreateTime": now,
         "MsgType": "text",
-        "Content": "你好，我是机器人小Q，有什么可以帮助你的吗？"
-
-    }, mimetype='application/json')
+        "Content": "文本消息"
+    }
+    app.logger.info(f"Response message: {res_body}")
+    return Response(response=res_body, mimetype='application/json', status=200)
