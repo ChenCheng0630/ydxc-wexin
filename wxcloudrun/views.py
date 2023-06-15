@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask import render_template, request, Response
+from flask import render_template, request, Response, jsonify
 from run import app
 from wxcloudrun.dao import delete_counterbyid, query_counterbyid, insert_counter, update_counterbyid
 from wxcloudrun.model import Counters
@@ -83,4 +83,4 @@ def send_message():
         "Content": "文本消息"
     }
     app.logger.info(f"Response message: {res_body}")
-    return Response(response=res_body, mimetype='application/json', status=200)
+    return jsonify(res_body)
