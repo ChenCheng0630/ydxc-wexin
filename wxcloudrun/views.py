@@ -1,3 +1,4 @@
+import json
 from datetime import datetime
 from flask import render_template, request, Response, jsonify
 from run import app
@@ -82,5 +83,5 @@ def send_message():
         "MsgType": "text",
         "Content": "文本消息"
     }
-    app.logger.info(f"Response message: {res_body}")
-    return jsonify(res_body)
+    res_data = json.dumps(res_body, ensure_ascii=False)
+    return Response(res_data, mimetype='application/json')
