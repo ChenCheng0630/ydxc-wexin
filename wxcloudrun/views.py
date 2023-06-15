@@ -11,6 +11,7 @@ def index():
     """
     :return: 返回index页面
     """
+    app.logger.info("Displaying index page...")
     return render_template('index.html')
 
 
@@ -69,7 +70,7 @@ def get_count():
 @app.route('/api/send_message', methods=['POST'])
 def send_message():
     data = request.get_json()
-    print(f"data: {data}")
+    app.logger.info(f"Received message: {data}")
 
     return Response({
         "ToUserName": data["FromUserName"],
