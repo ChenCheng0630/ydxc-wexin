@@ -1,87 +1,54 @@
 import json
 from datetime import datetime
-from flask import render_template, request, Response, jsonify
-from run import app
-from wxcloudrun.dao import delete_counterbyid, query_counterbyid, insert_counter, update_counterbyid
-from wxcloudrun.model import Counters
-from wxcloudrun.response import make_succ_empty_response, make_succ_response, make_err_response
-
-
-@app.route('/')
-def index():
-    """
-    :return: 返回index页面
-    """
-    app.logger.info("Displaying index page...")
-    return render_template('index.html')
-
-
-@app.route('/api/count', methods=['POST'])
-def count():
-    """
-    :return:计数结果/清除结果
-    """
-
-    # 获取请求体参数
-    params = request.get_json()
-
-    # 检查action参数
-    if 'action' not in params:
-        return make_err_response('缺少action参数')
-
-    # 按照不同的action的值，进行不同的操作
-    action = params['action']
-
-    # 执行自增操作
-    if action == 'inc':
-        counter = query_counterbyid(1)
-        if counter is None:
-            counter = Counters()
-            counter.id = 1
-            counter.count = 1
-            counter.created_at = datetime.now()
-            counter.updated_at = datetime.now()
-            insert_counter(counter)
-        else:
-            counter.id = 1
-            counter.count += 1
-            counter.updated_at = datetime.now()
-            update_counterbyid(counter)
-        return make_succ_response(counter.count)
-
-    # 执行清0操作
-    elif action == 'clear':
-        delete_counterbyid(1)
-        return make_succ_empty_response()
-
-    # action参数错误
-    else:
-        return make_err_response('action参数错误')
-
-
-@app.route('/api/count', methods=['GET'])
-def get_count():
-    """
-    :return: 计数的值
-    """
-    counter = Counters.query.filter(Counters.id == 1).first()
-    return make_succ_response(0) if counter is None else make_succ_response(counter.count)
+from flask import render_template, request, Response, jsonify, g, current_app
+from wxcloudrun.dao import query_voucher_by_code, delete_voucher_by_code, insert_voucher, update_voucher_status
+from wxcloudrun.model import Voucher
+from wxcloudrun.utils import generate_voucher_code_by_voucher_link, check_admin, process_admin_content, process_content
+from wxcloudrun import app
 
 
 @app.route('/api/send_message', methods=['POST'])
 def send_message():
-    data = request.get_json()
-    app.logger.info(f"Received message: {data}")
 
-    # get current time in integer
-    now = int(datetime.now().timestamp())
+    try:
+        data = request.get_json()
 
-    res_body = {
-        "ToUserName": data["FromUserName"],
-        "FromUserName": data["ToUserName"],
-        "CreateTime": now,
-        "MsgType": "text",
-        "Content": "文本消息"
-    }
-    res_data = json.dumps(res_body, ensure_ascii=False)
-    return Response(res_data, mimetype='application/json')
+        if data is None:
+            raise Exception("Request body is empty")
+
+        g.data = data
+        user = data["FromUserName"]
+        content = data["Content"]
+
+        is_admin = check_admin(user)
+        if is_admin:
+            message = process_admin_content(content)
+
+            res_body = {
+                "ToUserName": data["FromUserName"],
+                "FromUserName": data["ToUserName"],
+                "CreateTime": int(datetime.now().timestamp()),
+                "MsgType": "text",
+                "Content": message
+            }
+
+            res_data = json.dumps(res_body, ensure_ascii=False)
+            return Response(res_data, mimetype='application/json')
+
+        else:
+            message = process_content(content)
+
+            res_body = {
+                "ToUserName": data["FromUserName"],
+                "FromUserName": data["ToUserName"],
+                "CreateTime": int(datetime.now().timestamp()),
+                "MsgType": "text",
+                "Content": message
+            }
+
+            res_data = json.dumps(res_body, ensure_ascii=False)
+            return Response(res_data, mimetype='application/json')
+
+    except Exception as e:
+        app.logger.error(f"Failed to parse request body: {e}")
+        return Response(status=400)
