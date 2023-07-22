@@ -3,7 +3,7 @@ import pymysql
 import config
 import json
 from datetime import datetime
-from flask import Flask, request, Response, g
+from flask import Flask, request, Response, g, render_template
 
 
 # 因MySQLDB不支持Python3，使用pymysql扩展库代替MySQLDB库
@@ -40,6 +40,11 @@ db.create_all()
 
 
 app.config.from_object('config')
+
+
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 
 @app.route('/api/send_message', methods=['POST'])
