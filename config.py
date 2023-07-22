@@ -5,7 +5,7 @@ DEBUG = True
 
 # 读取数据库环境变量
 username = os.environ.get("MYSQL_USERNAME", 'root')
-password = os.environ.get("MYSQL_PASSWORD", 'Cc991207.m')
+password = os.environ.get("MYSQL_PASSWORD", '')
 db_address = os.environ.get("MYSQL_ADDRESS", 'localhost:3306')
 
 # Messages
