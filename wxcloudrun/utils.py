@@ -3,7 +3,7 @@ import os
 from flask import g, current_app
 from wxcloudrun.dao import query_voucher_by_code, delete_voucher_by_code, insert_voucher, update_voucher_status, query_all_voucher
 from wxcloudrun.enums import VoucherStatus, Command, AdminCommand
-from config import SEPARATOR
+from config import SEPARATOR, CODE_LINK_SEPARATOR
 
 ADMIN_USER = []
 ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "#password#")
@@ -83,8 +83,9 @@ def process_admin_add_voucher(commands):
 
     messages = []
 
-    for voucher_link in commands:
-        voucher_code = generate_voucher_code_by_voucher_link(voucher_link)
+    for command in commands:
+        voucher_code, voucher_link = command.split(CODE_LINK_SEPARATOR)
+        # voucher_code = generate_voucher_code_by_voucher_link(voucher_link)
         voucher = query_voucher_by_code(voucher_code)
         if voucher is not None:
             message = f"{voucher.voucher_code}{SEPARATOR}{voucher.voucher_link}{SEPARATOR}链接已存在{SEPARATOR}{voucher.voucher_status}"

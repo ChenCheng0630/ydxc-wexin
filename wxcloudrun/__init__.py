@@ -23,7 +23,7 @@ class VoucherStatus:
     USED = '已核销'
 
 
-class Voucher(db.Model):
+class Voucher(db.Model):  # type: ignore
     __tablename__ = 'Voucher'
     id = db.Column(db.Integer, primary_key=True)
     voucher_link = db.Column(db.String(1024), nullable=False)

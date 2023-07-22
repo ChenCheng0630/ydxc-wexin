@@ -1,9 +1,7 @@
 import json
 from datetime import datetime
 from flask import render_template, request, Response, jsonify, g, current_app
-from wxcloudrun.dao import query_voucher_by_code, delete_voucher_by_code, insert_voucher, update_voucher_status
-from wxcloudrun.model import Voucher
-from wxcloudrun.utils import generate_voucher_code_by_voucher_link, check_admin, process_admin_content, process_content
+from wxcloudrun.utils import check_admin, process_admin_content, process_content
 from wxcloudrun import app
 
 

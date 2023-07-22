@@ -11,3 +11,4 @@ db_address = os.environ.get("MYSQL_ADDRESS", 'localhost:3306')
 # Messages
 
 SEPARATOR = " | "
+CODE_LINK_SEPARATOR = " "
