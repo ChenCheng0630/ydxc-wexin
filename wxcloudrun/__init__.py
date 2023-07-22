@@ -14,6 +14,7 @@ app = Flask(__name__, instance_relative_config=True)
 app.config['DEBUG'] = config.DEBUG
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://{}:{}@{}/ydxc'.format(config.username, config.password,
                                                                        config.db_address)
+app.config['MAIN_PAGE_IMAGE_PATH'] = config.MAIN_PAGE_IMAGE_PATH
 
 db = SQLAlchemy(app)
 
@@ -44,7 +45,7 @@ app.config.from_object('config')
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', image_path=app.config['MAIN_PAGE_IMAGE_PATH'])
 
 
 @app.route('/api/send_message', methods=['POST'])
