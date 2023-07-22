@@ -74,8 +74,19 @@ def process_admin_content(content):
         return process_admin_query_all_voucher(commands[1:])
     elif commands[0] == Command.ADMIN_REGISTER:
         return process_admin_register(commands[1:])
+    elif commands[0] == AdminCommand.ADMIN_LOGOUT:
+        return process_admin_logout(commands[1:])
     else:
         return "无法识别的命令。\n"
+
+
+def process_admin_logout(commands):
+    user_name = g.data["FromUserName"]
+    if user_name not in ADMIN_USER:
+        return "未注册。"
+
+    ADMIN_USER.remove(user_name)
+    return "退出登录成功。"
 
 
 def process_admin_add_voucher(commands):
@@ -88,7 +99,7 @@ def process_admin_add_voucher(commands):
         # voucher_code = generate_voucher_code_by_voucher_link(voucher_link)
         voucher = query_voucher_by_code(voucher_code)
         if voucher is not None:
-            message = f"{voucher.voucher_code}{SEPARATOR}{voucher.voucher_link}{SEPARATOR}链接已存在{SEPARATOR}{voucher.voucher_status}"
+            message = f"{voucher.voucher_code}{SEPARATOR}{voucher.voucher_link}{SEPARATOR}兑换码已存在{SEPARATOR}{voucher.voucher_status}"
             messages.append(message)
             continue
 

@@ -5,6 +5,11 @@ from wxcloudrun.utils import check_admin, process_admin_content, process_content
 from wxcloudrun import app
 
 
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+
 @app.route('/api/send_message', methods=['POST'])
 def send_message():
 

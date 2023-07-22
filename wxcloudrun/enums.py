@@ -12,3 +12,4 @@ class AdminCommand():
     ADMIN_DELETE_VOUCHER = "/删除"
     ADMIN_QUERY_VOUCHER = "/查询"
     ADMIN_QUERY_ALL_VOUCHER = "/查询所有"
+    ADMIN_LOGOUT = "/退出登录"
