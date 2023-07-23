@@ -132,4 +132,4 @@ dmypy.json
 .venv
 .vscode
 .cloudbase
-test.py
+test/

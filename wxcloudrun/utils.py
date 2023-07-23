@@ -70,8 +70,8 @@ def process_admin_content(content):
         return process_admin_delete_voucher(commands[1:])
     elif commands[0] == AdminCommand.ADMIN_QUERY_VOUCHER:
         return process_admin_query_voucher(commands[1:])
-    elif commands[0] == AdminCommand.ADMIN_QUERY_ALL_VOUCHER:
-        return process_admin_query_all_voucher(commands[1:])
+    # elif commands[0] == AdminCommand.ADMIN_QUERY_ALL_VOUCHER:
+        # return process_admin_query_all_voucher(commands[1:])
     elif commands[0] == Command.ADMIN_REGISTER:
         return process_admin_register(commands[1:])
     elif commands[0] == AdminCommand.ADMIN_LOGOUT:
