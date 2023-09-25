@@ -30,10 +30,12 @@ def process_user_fetch_voucher_link(command):
     if voucher is None:
         return "无效的兑换码。\n"
 
-    if voucher.voucher_status == VoucherStatus.USED:
-        return "兑换码已被使用。\n"
-
     voucher_link = voucher.voucher_link
+
+    if voucher.voucher_status == VoucherStatus.USED:
+        return f"兑换链接：{voucher.voucher_link}\n"
+        # return "兑换码已被使用。\n"
+
     update_voucher_status(voucher_code, VoucherStatus.USED)
     return f"兑换链接：{voucher_link}\n"
 
